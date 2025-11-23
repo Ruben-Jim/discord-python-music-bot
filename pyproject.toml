@@ -4,4 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "discord-py>=2.6.4",
+    "youtube-search>=2.1.2",
+    "youtube-search-python>=1.6.6",
+    "yt-dlp>=2025.11.12",
+]

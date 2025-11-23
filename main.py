@@ -3,6 +3,7 @@ from discord.ext import commands
 import yt_dlp
 from youtube_search import YoutubeSearch
 import asyncio
+import os
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -217,7 +218,7 @@ async def queue(ctx):
 
 
 @bot.command()
-async def loop(ctx, mode: str = None):
+async def loop(ctx, mode: str | None = None):
     if mode is None:
         current = bot.loop_mode.get(ctx.guild.id, 0)
         modes = ["off", "single", "queue"]
@@ -247,4 +248,10 @@ async def volume(ctx, vol: int):
 
 
 # =============== RUN THE BOT ===============
-bot.run("YOUR_TOKEN_WILL_BE_HERE_WHEN_YOU_SEND_IT")
+TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not TOKEN:
+    print("❌ Error: DISCORD_BOT_TOKEN environment variable not set!")
+    print("Please add your Discord bot token as a secret.")
+    exit(1)
+    
+bot.run(TOKEN)
