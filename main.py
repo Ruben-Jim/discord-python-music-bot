@@ -1,9 +1,12 @@
+from dotenv import load_dotenv
+load_dotenv()
 import discord
 from discord.ext import commands
 import yt_dlp
 from youtube_search import YoutubeSearch
 import asyncio
 import os
+import shutil
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,10 +43,21 @@ ytdl_format_options = {
     }],
 }
 
+# FFmpeg executable path - can be set via FFMPEG_PATH environment variable
+FFMPEG_EXECUTABLE = os.getenv('FFMPEG_PATH', 'ffmpeg')
+
+# Check if FFmpeg is available
+if not shutil.which(FFMPEG_EXECUTABLE):
+    print(f"⚠️  WARNING: FFmpeg not found at '{FFMPEG_EXECUTABLE}'")
+    print("   Please install FFmpeg and add it to your PATH, or set FFMPEG_PATH environment variable")
+    print("   Windows: Download from https://ffmpeg.org/download.html or use: choco install ffmpeg")
+    print("   Or set FFMPEG_PATH in your .env file to the full path of ffmpeg.exe")
+
 ffmpeg_options = {
     'before_options':
     '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-    'options': '-vn -filter:a "volume=0.75"'
+    'options': '-vn -filter:a "volume=0.75"',
+    'executable': FFMPEG_EXECUTABLE
 }
 
 ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
