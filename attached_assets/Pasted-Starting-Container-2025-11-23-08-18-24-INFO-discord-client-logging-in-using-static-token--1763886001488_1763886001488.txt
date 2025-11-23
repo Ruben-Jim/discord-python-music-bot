@@ -1,0 +1,38 @@
+Starting Container
+[2025-11-23 08:18:24] [INFO    ] discord.client: logging in using static token
+[2025-11-23 08:18:25] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: c2d987150598bcf347549069ceaeb40c).
+✅ Music BOT#0799 is online and ready to play music!
+[2025-11-23 08:19:17] [INFO    ] discord.voice_state: Connecting to voice...
+[2025-11-23 08:19:17] [INFO    ] discord.voice_state: Starting voice handshake... (connection attempt 1)
+[2025-11-23 08:19:17] [INFO    ] discord.voice_state: Voice handshake complete. Endpoint found: c-sjc05-73f68a01.discord.media:2096
+[2025-11-23 08:19:17] [INFO    ] discord.voice_state: Voice connection complete.
+[2025-11-23 08:19:20] [ERROR   ] discord.ext.commands.bot: Ignoring exception in command play
+Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/discord/ext/commands/core.py", line 266, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/main.py", line 175, in play
+    await play_next(ctx)
+  File "/app/main.py", line 92, in play_next
+    ctx.voice_client.play(player,
+  File "/opt/venv/lib/python3.11/site-packages/discord/voice_client.py", line 506, in play
+    self.encoder = opus.Encoder(
+                   ^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/discord/opus.py", line 359, in __init__
+    _OpusStruct.get_opus_version()  # lazy loads the opus library
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/discord/opus.py", line 332, in get_opus_version
+    raise OpusNotLoaded()
+discord.opus.OpusNotLoaded
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/discord/ext/commands/bot.py", line 1376, in invoke
+    await ctx.command.invoke(ctx)
+  File "/opt/venv/lib/python3.11/site-packages/discord/ext/commands/core.py", line 1064, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/discord/ext/commands/core.py", line 275, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: OpusNotLoaded: 
+[2025-11-23 08:19:20] [INFO    ] discord.player: ffmpeg process 9 has not terminated. Waiting to terminate...
+[2025-11-23 08:19:20] [INFO    ] discord.player: ffmpeg process 9 should have terminated with a return code of -9.
