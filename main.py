@@ -138,7 +138,7 @@ async def leave(ctx):
         await ctx.send("I'm not in a voice channel.")
 
 
-@bot.command(aliases=['p', 'play'])
+@bot.command(aliases=['p'])
 async def play(ctx, *, query: str):
     if not ctx.voice_client:
         await ctx.invoke(join)
