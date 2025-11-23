@@ -46,12 +46,43 @@ ytdl_format_options = {
 # FFmpeg executable path - can be set via FFMPEG_PATH environment variable
 FFMPEG_EXECUTABLE = os.getenv('FFMPEG_PATH', 'ffmpeg')
 
-# Check if FFmpeg is available
+# Auto-detect FFmpeg in common Windows locations if not in PATH
 if not shutil.which(FFMPEG_EXECUTABLE):
-    print(f"⚠️  WARNING: FFmpeg not found at '{FFMPEG_EXECUTABLE}'")
-    print("   Please install FFmpeg and add it to your PATH, or set FFMPEG_PATH environment variable")
-    print("   Windows: Download from https://ffmpeg.org/download.html or use: choco install ffmpeg")
-    print("   Or set FFMPEG_PATH in your .env file to the full path of ffmpeg.exe")
+    import pathlib
+    common_paths = [
+        # Winget installation location
+        pathlib.Path(os.environ.get('LOCALAPPDATA', '')) / 'Microsoft' / 'WinGet' / 'Packages',
+        # Common installation locations
+        pathlib.Path('C:/ffmpeg/bin/ffmpeg.exe'),
+        pathlib.Path('C:/Program Files/ffmpeg/bin/ffmpeg.exe'),
+        pathlib.Path('C:/Program Files (x86)/ffmpeg/bin/ffmpeg.exe'),
+    ]
+    
+    found = False
+    for base_path in common_paths:
+        if base_path.exists():
+            # If it's a directory (like WinGet Packages), search recursively
+            if base_path.is_dir():
+                for ffmpeg_path in base_path.rglob('ffmpeg.exe'):
+                    if ffmpeg_path.is_file():
+                        FFMPEG_EXECUTABLE = str(ffmpeg_path)
+                        found = True
+                        print(f"✅ Found FFmpeg at: {FFMPEG_EXECUTABLE}")
+                        break
+            # If it's a direct path to ffmpeg.exe
+            elif base_path.is_file():
+                FFMPEG_EXECUTABLE = str(base_path)
+                found = True
+                print(f"✅ Found FFmpeg at: {FFMPEG_EXECUTABLE}")
+                break
+        if found:
+            break
+    
+    if not found:
+        print(f"⚠️  WARNING: FFmpeg not found at '{FFMPEG_EXECUTABLE}'")
+        print("   Please install FFmpeg and add it to your PATH, or set FFMPEG_PATH environment variable")
+        print("   Windows: Download from https://ffmpeg.org/download.html or use: winget install ffmpeg")
+        print("   Or set FFMPEG_PATH in your .env file to the full path of ffmpeg.exe")
 
 ffmpeg_options = {
     'before_options':
